@@ -1,0 +1,197 @@
+.supply-page {
+  max-width: 850px;       
+  margin: 5px auto;     
+  padding: 0 4px;      
+  box-sizing: border-box;
+}
+
+/* page heading, completion count */
+.supply-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.supply-header h1 {
+  margin-bottom: 6px;
+}
+
+.supply-count {
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+/* progress bar */
+.progress-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+/* 'Add supply' form */
+.add-supply-form {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.add-supply-form h2 {
+  font-size: 18px;
+  margin: 0 0 16px;
+  text-align: left;
+}
+
+.form-fields {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.form-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 130px;
+  font-size: 14px;
+}
+
+.form-fields input,
+.form-fields select,
+.add-category-form input {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  min-width: 0;
+}
+
+.add-button,
+.category-button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 7px;
+  background: var(--accent);
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+.add-button:hover,
+.category-button:hover {
+  opacity: 0.85;
+}
+
+/* 'Add category' form */
+.add-category-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.add-category-form input {
+  flex: 1;
+}
+
+/* Category sections */
+.supply-category {
+  margin-bottom: 28px;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.category-header h2 {
+  font-size: 19px;
+  margin: 0;
+}
+
+.category-header span {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.empty-category {
+  color: var(--text);
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+/* Individual supply row */
+.supply-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.supply-item input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.supply-name {
+  flex: 1;
+}
+
+.supply-name.completed {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.supply-quantity {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.delete-button {
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  color: #e05252;
+}
+
+/* Smaller screens */
+@media (max-width: 600px) {
+  .supply-header {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .form-fields {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .add-category-form {
+    flex-direction: column;
+  }
+}

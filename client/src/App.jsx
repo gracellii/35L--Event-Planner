@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Routes, Route } from 'react-router-dom'
-import SupplyList from './pages/SupplyList'
+import SupplyList from './pages/SupplyList/SupplyList'
 import './App.css'
 
 // Home page
@@ -34,8 +34,7 @@ function App() {
         <div className="nav-right">
           <button
             className="nav-button"
-            onClick={() => navigate('/')}
-          >
+            onClick={() => navigate('/')}>
             Home
           </button>
 
