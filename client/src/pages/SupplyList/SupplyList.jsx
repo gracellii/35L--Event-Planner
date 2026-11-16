@@ -1,4 +1,4 @@
-//suppy list page
+//supply list page
 import { useEffect, useState } from 'react'
 import './SupplyList.css'
 
@@ -16,7 +16,6 @@ function SupplyList() {
         if (!response.ok) {
           throw new Error('Failed to load supplies')
         }
-
         return response.json()
       })
       .then(data => {
@@ -36,11 +35,12 @@ function SupplyList() {
         if (!response.ok) {
           throw new Error('Failed to load categories')
         }
-
         return response.json()
       })
-      .then(data => {
-        setCategories(data.map(category => category.name))
+      .then(data => { setCategories(data)
+        if (data.length > 0) {
+          setCategory(data[0].name)
+        }
       })
       .catch(error => {
         console.error('Error loading categories:', error)
@@ -115,9 +115,8 @@ function SupplyList() {
     if (!trimmedCategory) return
 
     //check for duplicate category name
-    const alreadyExists = categories.some(
-      existing =>
-        existing.toLowerCase() === trimmedCategory.toLowerCase()
+    const alreadyExists = categories.some(existing =>
+      existing.name.toLowerCase() === trimmedCategory.toLowerCase()
     )
 
     if (alreadyExists) return
@@ -142,7 +141,7 @@ function SupplyList() {
       //update state with the category from database
       setCategories(prevCategories => [
         ...prevCategories,
-        newCategoryData.name
+        newCategoryData
       ])
       setCategory(newCategoryData.name)
 
@@ -346,6 +345,37 @@ function SupplyList() {
     }
   }
 
+  //delete category
+  async function deleteCategory(category) {
+    const confirmed = window.confirm(
+      `Delete the "${category.name}" category?`
+    )
+
+    if (!confirmed) return
+
+    try {
+      const response = await fetch(`/api/categories/${category.id}`, {
+        method: 'DELETE'
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        alert(data.message || 'Failed to delete category.')
+        return
+      }
+
+      // Remove the deleted category from the frontend
+      setCategories(prevCategories =>
+        prevCategories.filter(item => item.id !== category.id)
+      )
+    } catch (error) {
+      console.error('Error deleting category:', error)
+      alert('Failed to delete category.')
+    }
+  }
+
+
   //overall progress
   const completedCount = supplies.filter(
     supply => supply.completed
@@ -406,11 +436,11 @@ function SupplyList() {
               value={category}
               onChange={event => setCategory(event.target.value)}
             >
-              {categories.map(cat => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
+            {categories.map(cat => (
+              <option key={cat.id} value={cat.name}>
+                {cat.name}
+              </option>
+            ))}
             </select>
           </label>
 
@@ -435,157 +465,171 @@ function SupplyList() {
       </form>
 
       {/* group by category */}
-      <div className="supply-list">
-        {categories.map(cat => {
-          const categorySupplies = supplies.filter(
-            supply => supply.category === cat
-          )
+     <div className="supply-list">
+      {categories.map(cat => {
+        const categorySupplies = supplies.filter(
+          supply => supply.category === cat.name
+        )
 
-          const categoryCompleted = categorySupplies.filter(
-            supply => supply.completed
-          ).length
+        const categoryCompleted = categorySupplies.filter(
+          supply => supply.completed
+        ).length
 
-          return (
-            <section className="supply-category" key={cat}>
-              <div className="category-header">
-                <h2>{cat}</h2>
+        return (
+          <section className="supply-category" key={cat.id}>
+            <div className="category-header">
+              <h2>{cat.name}</h2>
+
+              <div className="category-header-actions">
                 <span>
                   {categoryCompleted} / {categorySupplies.length}
                 </span>
+
+                {categorySupplies.length === 0 && (
+                  <button
+                    type="button"
+                    className="delete-button"
+                    onClick={() => deleteCategory(cat)}
+                    title="Delete category"
+                    aria-label={`Delete ${cat.name} category`}
+                  >
+                    ×
+                  </button>
+                )}
               </div>
+            </div>
 
-              {categorySupplies.length === 0 ? (
-                <p className="empty-category">
-                  No supplies yet
-                </p>
-              ) : (
-                categorySupplies.map(supply => {
-                  const isExpanded = expandedSupplyId === supply.id
-                  /*NEW*/
-                  const hasUnsavedChanges = (supply.notes ?? '') !== (supply.savedNotes ?? '')
-                  return (
-                    <div className="supply-entry" key={supply.id}>
-                      <div className="supply-item">
-                        <input
-                          type="checkbox"
-                          checked={supply.completed}
-                          onChange={() => toggleSupply(supply.id)}
-                        />
+            {categorySupplies.length === 0 ? (
+              <p className="empty-category">
+                No supplies yet
+              </p>
+            ) : (
+              categorySupplies.map(supply => {
+                const isExpanded = expandedSupplyId === supply.id
+                const hasUnsavedChanges = (supply.notes ?? '') !== (supply.savedNotes ?? '')
+                return (
+                  <div className="supply-entry" key={supply.id}>
+                    <div className="supply-item">
+                      <input
+                        type="checkbox"
+                        checked={supply.completed}
+                        onChange={() => toggleSupply(supply.id)}
+                      />
 
-                        {editingSupplyId === supply.id ? (
-                          <>
-                            <input
-                              type="text"
-                              className="edit-supply-name"
-                              value={editName}
-                              onChange={event => setEditName(event.target.value)}
-                              placeholder="Supply name"
-                            />
-
-                            <input
-                              type="number"
-                              className="edit-supply-quantity"
-                              min="1"
-                              value={editQuantity}
-                              onChange={event => setEditQuantity(event.target.value)}
-                            />
-
-                            <button
-                              type="button"
-                              className="save-edit-button"
-                              onClick={() => saveSupplyEdit(supply.id)}
-                            >
-                              Save
-                            </button>
-
-                            <button
-                              type="button"
-                              className="cancel-edit-button"
-                              onClick={cancelEditing}
-                            >
-                              Cancel
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            {/* Clicking the name expands/collapses notes */}
-                            <button
-                              type="button"
-                              className="supply-name-toggle"
-                              onClick={() =>
-                                setExpandedSupplyId(isExpanded ? null : supply.id)
-                              }
-                              aria-expanded={isExpanded}
-                              aria-controls={`supply-notes-${supply.id}`}
-                            >
-                              <span
-                                className={
-                                  supply.completed
-                                    ? 'supply-name completed'
-                                    : 'supply-name'
-                                }
-                              >
-                                {supply.name}
-                              </span>
-
-                              <span className="expand-indicator">
-                                {isExpanded ? '−' : '+'}
-                              </span>
-                            </button>
-
-                            <span className="supply-quantity">
-                              Qty: {supply.quantity}
-                            </span>
-
-                            <button
-                              type="button"
-                              className="edit-button"
-                              onClick={() => startEditing(supply)}
-                              aria-label={`Edit ${supply.name}`}
-                            >
-                              Edit
-                            </button>
-
-                            <button
-                              type="button"
-                              className="delete-button"
-                              onClick={() => deleteSupply(supply.id)}
-                              aria-label={`Delete ${supply.name}`}
-                            >
-                              ×
-                            </button>
-                          </>
-                        )}
-                      </div>
-                      {/* expanded notes */}
-                      {isExpanded && (
-                        <div
-                          className="supply-notes"
-                          id={`supply-notes-${supply.id}`}
-                        >
-                          <label htmlFor={`notes-${supply.id}`}>
-                            Notes
-                          </label>
-
-                          <textarea
-                            id={`notes-${supply.id}`}
-                            placeholder="Add details about type, source, etc"
-                            value={supply.notes}
-                            onChange={event =>
-                              updateSupplyNotes(supply.id, event.target.value)
-                            }
+                      {editingSupplyId === supply.id ? (
+                        <>
+                          <input
+                            type="text"
+                            className="edit-supply-name"
+                            value={editName}
+                            onChange={event => setEditName(event.target.value)}
+                            placeholder="Supply name"
                           />
+
+                          <input
+                            type="number"
+                            className="edit-supply-quantity"
+                            min="1"
+                            value={editQuantity}
+                            onChange={event => setEditQuantity(event.target.value)}
+                          />
+
                           <button
                             type="button"
-                            className={`save-notes-button ${
-                              hasUnsavedChanges ? 'has-changes' : 'no-changes'
-                            }`}
-                            onClick={() => saveSupplyNotes(supply.id)}
+                            className="save-edit-button"
+                            onClick={() => saveSupplyEdit(supply.id)}
                           >
                             Save
                           </button>
-                        </div>
+
+                          <button
+                            type="button"
+                            className="cancel-edit-button"
+                            onClick={cancelEditing}
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          {/* clicking the name expands/collapses notes */}
+                          <button
+                            type="button"
+                            className="supply-name-toggle"
+                            onClick={() =>
+                              setExpandedSupplyId(isExpanded ? null : supply.id)
+                            }
+                            aria-expanded={isExpanded}
+                            aria-controls={`supply-notes-${supply.id}`}
+                          >
+                            <span
+                              className={
+                                supply.completed
+                                  ? 'supply-name completed'
+                                  : 'supply-name'
+                              }
+                            >
+                              {supply.name}
+                            </span>
+
+                            <span className="expand-indicator">
+                              {isExpanded ? '−' : '+'}
+                            </span>
+                          </button>
+
+                          <span className="supply-quantity">
+                            Qty: {supply.quantity}
+                          </span>
+
+                          <button
+                            type="button"
+                            className="edit-button"
+                            onClick={() => startEditing(supply)}
+                            aria-label={`Edit ${supply.name}`}
+                          >
+                            Edit
+                          </button>
+
+                          <button
+                            type="button"
+                            className="delete-button"
+                            onClick={() => deleteSupply(supply.id)}
+                            aria-label={`Delete ${supply.name}`}
+                          >
+                            ×
+                          </button>
+                        </>
                       )}
+                    </div>
+                    {/* expanded notes */}
+                    {isExpanded && (
+                      <div
+                        className="supply-notes"
+                        id={`supply-notes-${supply.id}`}
+                      >
+                        <label htmlFor={`notes-${supply.id}`}>
+                          Notes
+                        </label>
+
+                        <textarea
+                          id={`notes-${supply.id}`}
+                          placeholder="Add details about type, source, etc"
+                          value={supply.notes}
+                          onChange={event =>
+                            updateSupplyNotes(supply.id, event.target.value)
+                          }
+                        />
+                        <button
+                          type="button"
+                          className={`save-notes-button ${
+                            hasUnsavedChanges ? 'has-changes' : 'no-changes'
+                          }`}
+                          onClick={() => saveSupplyNotes(supply.id)}
+                        >
+                          Save
+                        </button>
+                      </div>
+                    )}
                     </div>
                   )
                 })
