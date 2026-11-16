@@ -1,3 +1,5 @@
+
+/*  Supply List Page*/
 .supply-page {
   width: 100%;
   max-width: none;
@@ -6,18 +8,16 @@
   box-sizing: border-box;
 }
 
-/* page heading, completion count */
+/* header, title */
 .supply-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
-
 .supply-header h1 {
   margin-bottom: 6px;
 }
-
 .supply-count {
   color: var(--text-h);
   font-weight: 600;
@@ -31,7 +31,6 @@
   overflow: hidden;
   margin-bottom: 32px;
 }
-
 .progress-fill {
   height: 100%;
   background: var(--accent);
@@ -39,40 +38,13 @@
   transition: width 0.3s ease;
 }
 
-/* 'Add supply' form */
-.add-supply-form {
-  padding: 20px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  margin-bottom: 16px;
-}
-
-.add-supply-form h2 {
-  font-size: 18px;
-  margin: 0 0 16px;
-  text-align: left;
-}
-
-.form-fields {
-  display: flex;
-  align-items: end;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.form-fields label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
-  min-width: 130px;
-  font-size: 14px;
-}
-
+/* user input forms  */
 .form-fields input,
 .form-fields select,
-.add-category-form input {
-  padding: 10px;
+.add-category-form input,
+.edit-supply-name,
+.edit-supply-quantity,
+.supply-notes textarea {
   border: 1px solid var(--border);
   border-radius: 7px;
   background: var(--bg);
@@ -81,9 +53,54 @@
   min-width: 0;
 }
 
+/* Add supply */
+.add-supply-form {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.add-supply-form h2 {
+  font-size: 18px;
+  margin: 0 0 16px;
+  text-align: left;
+}
+
+/* Supply form */
+.form-fields {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.form-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 130px;
+  font-size: 14px;
+}
+.form-fields input,
+.form-fields select,
+.add-category-form input {
+  padding: 10px;
+}
+
+/* Add category */
+.add-category-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.add-category-form input {
+  flex: 1;
+}
+
+/* buttons */
 .add-button,
-.category-button {
-  padding: 10px 16px;
+.category-button,
+.save-notes-button {
   border: none;
   border-radius: 7px;
   background: var(--accent);
@@ -91,24 +108,49 @@
   font: inherit;
   cursor: pointer;
 }
-
+.add-button,
+.category-button {
+  padding: 10px 16px;
+}
+.save-notes-button {
+  align-self: flex-end;
+  padding: 8px 18px;
+}
 .add-button:hover,
-.category-button:hover {
+.category-button:hover,
+.save-notes-button:hover {
   opacity: 0.85;
 }
 
-/* 'Add category' form */
-.add-category-form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 32px;
+/* 'Save notes' button */
+.save-notes-button.no-changes {
+  opacity: 0.5;
+}
+.save-notes-button.has-changes {
+  opacity: 1;
 }
 
-.add-category-form input {
-  flex: 1;
+/* secondary buttons */
+.edit-button,
+.save-edit-button,
+.cancel-edit-button {
+  padding: 4px 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
 }
 
-/* Category sections */
+.edit-button:hover,
+.save-edit-button:hover,
+.cancel-edit-button:hover {
+  opacity: 0.8;
+}
+
+/* supply categories*/
 .supply-category {
   margin-bottom: 28px;
 }
@@ -131,29 +173,41 @@
   font-size: 13px;
   color: var(--text);
 }
-
 .empty-category {
   color: var(--text);
   font-size: 14px;
   padding: 8px 0;
 }
+.category-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.category-header .delete-button {
+  font-size: 20px;
+}
 
-/* Individual supply row */
+/*  supply entries*/
+.supply-entry {
+  border-bottom: 1px solid var(--border);
+}
+
 .supply-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 8px;
-  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
 }
 
+/* completion status */
 .supply-item input[type="checkbox"] {
   width: 17px;
   height: 17px;
   accent-color: var(--accent);
+  background: transparent;
   cursor: pointer;
 }
-
+/* Supply name */
 .supply-name {
   flex: 1;
 }
@@ -161,24 +215,6 @@
 .supply-name.completed {
   text-decoration: line-through;
   opacity: 0.5;
-}
-
-.supply-quantity {
-  font-size: 14px;
-  color: var(--text);
-}
-
-/* Individual supply entry */
-.supply-entry {
-  border-bottom: 1px solid var(--border);
-}
-
-/* Supply row */
-.supply-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 20px;
 }
 
 /* Clickable supply name */
@@ -200,13 +236,20 @@
   color: var(--accent);
 }
 
+/* Expand indicator */
 .expand-indicator {
   margin-left: 10px;
   color: var(--text);
   font-size: 18px;
 }
 
-/* notes section */
+/* Quantity */
+.supply-quantity {
+  font-size: 14px;
+  color: var(--text);
+}
+
+/*  supply notes*/
 .supply-notes {
   padding: 4px 20px 16px 49px;
   display: flex;
@@ -227,11 +270,6 @@
   padding: 10px;
   box-sizing: border-box;
   resize: vertical;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  background: var(--bg);
-  color: var(--text-h);
-  font: inherit;
 }
 
 .supply-notes textarea:focus {
@@ -239,27 +277,21 @@
   outline-offset: 1px;
 }
 
-.save-notes-button {
-  align-self: flex-end;
-  padding: 8px 18px;
-  border: none;
-  border-radius: 7px;
-  background: var(--accent);
-  color: white;
-  font: inherit;
-  cursor: pointer;
+/* editing an existing supply*/
+.edit-supply-name,
+.edit-supply-quantity {
+  padding: 8px 10px;
 }
-.save-notes-button:hover {
-  opacity: 0.85;
+
+.edit-supply-name {
+  flex: 1;
 }
-/* if no unsaved changes/new edits, is transparent */
-.save-notes-button.no-changes {
-  opacity: 0.5;
+
+.edit-supply-quantity {
+  width: 75px;
 }
-/* if unsanved changes/new edits, is opaque */
-.save-notes-button.has-changes {
-  opacity: 1;
-}
+
+/*  delete button*/
 
 .delete-button {
   border: none;
@@ -270,12 +302,10 @@
 }
 
 .delete-button:hover {
-  color: #e05252;
+  color: var(--danger, #e05252);
 }
+ 
 
-
-
-/* Smaller screens */
 @media (max-width: 600px) {
   .supply-header {
     align-items: flex-start;
@@ -290,58 +320,4 @@
   .add-category-form {
     flex-direction: column;
   }
-}
-
-/* Edit supply inputs */
-.edit-supply-name,
-.edit-supply-quantity {
-  padding: 8px 10px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: var(--input-bg);
-  color: var(--text-color);
-  font: inherit;
-  min-width: 0;
-}
-
-.edit-supply-name {
-  flex: 1;
-}
-
-.edit-supply-quantity {
-  width: 75px;
-}
-
-/* Edit, save, and cancel buttons */
-.edit-button,
-.save-edit-button,
-.cancel-edit-button {
-  padding: 4px 9px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.75rem;
-}
-
-.edit-button {
-  background: var(--accent-bg);
-  color: var(--text-color);
-
-}
-
-.save-edit-button {
-  background: var(--accent-bg);
-  color: var(--text-color);
-}
-
-.cancel-edit-button {
-  background: var(--accent-bg);
-  color: var(--text-color);
-}
-
-.edit-button:hover,
-.save-edit-button:hover,
-.cancel-edit-button:hover {
-  opacity: 0.8;
 }
