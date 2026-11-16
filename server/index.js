@@ -1,4 +1,6 @@
 const express = require('express');
+const suppliesRouter = require('./routes/supplies')
+const categoriesRouter = require('./routes/categories')
 
 const app = express();
 const PORT = 3000;
@@ -7,13 +9,14 @@ const PORT = 3000;
 const pool = require('./db');
 
 app.use(express.json());
+app.use('/api/supplies', suppliesRouter)
+app.use('/api/categories', categoriesRouter)
 
 app.get('/api/hello', (req, res) => {
   res.json({ message: 'Welcome to your Event Planner!' });
 });
 
-
-// Test PostgreSQL connection
+//TEST: Test PostgreSQL connection
 app.get('/api/db-test', async (req, res) => {
   try {
     const result = await pool.query('SELECT NOW()');

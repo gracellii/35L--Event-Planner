@@ -1,7 +1,8 @@
 .supply-page {
-  max-width: 850px;       
-  margin: 5px auto;     
-  padding: 0 4px;      
+  width: 100%;
+  max-width: none;
+  margin: 5px 0;
+  padding: 0 24px;
   box-sizing: border-box;
 }
 
@@ -251,6 +252,14 @@
 .save-notes-button:hover {
   opacity: 0.85;
 }
+/* if no unsaved changes/new edits, is transparent */
+.save-notes-button.no-changes {
+  opacity: 0.5;
+}
+/* if unsanved changes/new edits, is opaque */
+.save-notes-button.has-changes {
+  opacity: 1;
+}
 
 .delete-button {
   border: none;
@@ -281,4 +290,58 @@
   .add-category-form {
     flex-direction: column;
   }
+}
+
+/* Edit supply inputs */
+.edit-supply-name,
+.edit-supply-quantity {
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  font: inherit;
+  min-width: 0;
+}
+
+.edit-supply-name {
+  flex: 1;
+}
+
+.edit-supply-quantity {
+  width: 75px;
+}
+
+/* Edit, save, and cancel buttons */
+.edit-button,
+.save-edit-button,
+.cancel-edit-button {
+  padding: 4px 9px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+}
+
+.edit-button {
+  background: var(--accent-bg);
+  color: var(--text-color);
+
+}
+
+.save-edit-button {
+  background: var(--accent-bg);
+  color: var(--text-color);
+}
+
+.cancel-edit-button {
+  background: var(--accent-bg);
+  color: var(--text-color);
+}
+
+.edit-button:hover,
+.save-edit-button:hover,
+.cancel-edit-button:hover {
+  opacity: 0.8;
 }
