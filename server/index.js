@@ -147,12 +147,11 @@ app.post('/api/supplies', async (req, res) => {
   }
 })
 
-//Update supply's completion status, notes
+//Update/edit supply's name, quantity, completion status, notes
 app.put('/api/supplies/:id', async (req, res) => {
   try {
     const supplyId = Number(req.params.id)
-    const { completed, notes } = req.body || {}
-
+    const { completed, notes, name, quantity } = req.body || {}
     //validate ID
     if (!Number.isInteger(supplyId) || supplyId < 1) {
       return res.status(400).json({
@@ -173,6 +172,25 @@ app.put('/api/supplies/:id', async (req, res) => {
 
       values.push(completed)
       updates.push(`completed = $${values.length}`)
+    }
+
+    if (name !== undefined) {
+      if (typeof name !== 'string' || !name.trim()) {
+        return res.status(400).json({ message: 'Supply name is required.' })
+      }
+      values.push(name.trim())
+      updates.push(`name = $${values.length}`)
+    }
+
+    if (quantity !== undefined) {
+      const parsedQuantity = Number(quantity)
+
+      if (!Number.isInteger(parsedQuantity) || parsedQuantity < 1) {
+        return res.status(400).json({ message: 'Quantity must be a positive integer.' })
+      }
+
+      values.push(parsedQuantity)
+      updates.push(`quantity = $${values.length}`)
     }
 
     //update notes

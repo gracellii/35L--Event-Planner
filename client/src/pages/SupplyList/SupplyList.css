@@ -290,3 +290,57 @@
     flex-direction: column;
   }
 }
+
+/* Edit supply inputs */
+.edit-supply-name,
+.edit-supply-quantity {
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  font: inherit;
+  min-width: 0;
+}
+
+.edit-supply-name {
+  flex: 1;
+}
+
+.edit-supply-quantity {
+  width: 75px;
+}
+
+/* Edit, save, and cancel buttons */
+.edit-button,
+.save-edit-button,
+.cancel-edit-button {
+  padding: 4px 9px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+}
+
+.edit-button {
+  background: var(--accent-bg);
+  color: var(--text-color);
+
+}
+
+.save-edit-button {
+  background: var(--accent-bg);
+  color: var(--text-color);
+}
+
+.cancel-edit-button {
+  background: var(--accent-bg);
+  color: var(--text-color);
+}
+
+.edit-button:hover,
+.save-edit-button:hover,
+.cancel-edit-button:hover {
+  opacity: 0.8;
+}

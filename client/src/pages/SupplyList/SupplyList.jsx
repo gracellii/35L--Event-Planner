@@ -57,6 +57,13 @@ function SupplyList() {
 
   //exand/collapse supply notes
   const [expandedSupplyId, setExpandedSupplyId] = useState(null)
+  //edit an existing supply
+    //track which supply is currently being edited
+    const [editingSupplyId, setEditingSupplyId] = useState(null)
+
+    //store temporary name and quantity while editing
+    const [editName, setEditName] = useState('')
+    const [editQuantity, setEditQuantity] = useState(1)
 
   //add supply to overall list
   async function addSupply(e) {
@@ -247,6 +254,72 @@ function SupplyList() {
     }
   }
 
+  //start editing a supply
+  function startEditing(supply) {
+    setEditingSupplyId(supply.id)
+    setEditName(supply.name)
+    setEditQuantity(supply.quantity)
+  }
+
+  //cancel editing
+  function cancelEditing() {
+    setEditingSupplyId(null)
+    setEditName('')
+    setEditQuantity(1)
+  }
+
+  //save edited supply to database
+  async function saveSupplyEdit(id) {
+    if (!editName.trim()) {
+      alert('Supply name cannot be empty.')
+      return
+    }
+
+    const parsedQuantity = Number(editQuantity)
+
+    if (!Number.isInteger(parsedQuantity) || parsedQuantity < 1) {
+      alert('Quantity must be a positive integer.')
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/supplies/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: editName.trim(),
+          quantity: parsedQuantity
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update supply')
+      }
+
+      const updatedSupply = await response.json()
+
+      setSupplies(prevSupplies =>
+        prevSupplies.map(supply =>
+          supply.id === id
+            ? {
+                ...supply,
+                ...updatedSupply
+              }
+            : supply
+        )
+      )
+
+      //exit edit mode
+      cancelEditing()
+
+    } catch (error) {
+      console.error('Error editing supply:', error)
+      alert('Failed to save supply changes.')
+    }
+  }
+
   //delete supply (from databse)
   async function deleteSupply(id) {
     try {
@@ -398,45 +471,91 @@ function SupplyList() {
                           checked={supply.completed}
                           onChange={() => toggleSupply(supply.id)}
                         />
-                        {/* Clicking on the supply name expands/collapses notes */}
-                        <button
-                          type="button"
-                          className="supply-name-toggle"
-                          onClick={() =>
-                            setExpandedSupplyId(
-                              isExpanded ? null : supply.id
-                            )
-                          }
-                          aria-expanded={isExpanded}
-                          aria-controls={`supply-notes-${supply.id}`}
-                        >
-                          <span
-                            className={
-                              supply.completed
-                                ? 'supply-name completed'
-                                : 'supply-name'
-                            }
-                          >
-                            {supply.name}
-                          </span>
 
-                          <span className="expand-indicator">
-                            {isExpanded ? '−' : '+'}
-                          </span>
-                        </button>
+                        {editingSupplyId === supply.id ? (
+                          <>
+                            <input
+                              type="text"
+                              className="edit-supply-name"
+                              value={editName}
+                              onChange={event => setEditName(event.target.value)}
+                              placeholder="Supply name"
+                            />
 
-                        <span className="supply-quantity">
-                          Qty: {supply.quantity}
-                        </span>
+                            <input
+                              type="number"
+                              className="edit-supply-quantity"
+                              min="1"
+                              value={editQuantity}
+                              onChange={event => setEditQuantity(event.target.value)}
+                            />
 
-                        <button
-                          type="button"
-                          className="delete-button"
-                          onClick={() => deleteSupply(supply.id)}
-                          aria-label={`Delete ${supply.name}`}
-                        >
-                          ×
-                        </button>
+                            <button
+                              type="button"
+                              className="save-edit-button"
+                              onClick={() => saveSupplyEdit(supply.id)}
+                            >
+                              Save
+                            </button>
+
+                            <button
+                              type="button"
+                              className="cancel-edit-button"
+                              onClick={cancelEditing}
+                            >
+                              Cancel
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            {/* Clicking the name expands/collapses notes */}
+                            <button
+                              type="button"
+                              className="supply-name-toggle"
+                              onClick={() =>
+                                setExpandedSupplyId(isExpanded ? null : supply.id)
+                              }
+                              aria-expanded={isExpanded}
+                              aria-controls={`supply-notes-${supply.id}`}
+                            >
+                              <span
+                                className={
+                                  supply.completed
+                                    ? 'supply-name completed'
+                                    : 'supply-name'
+                                }
+                              >
+                                {supply.name}
+                              </span>
+
+                              <span className="expand-indicator">
+                                {isExpanded ? '−' : '+'}
+                              </span>
+                            </button>
+
+                            <span className="supply-quantity">
+                              Qty: {supply.quantity}
+                            </span>
+
+                            <button
+                              type="button"
+                              className="edit-button"
+                              onClick={() => startEditing(supply)}
+                              aria-label={`Edit ${supply.name}`}
+                            >
+                              Edit
+                            </button>
+
+                            <button
+                              type="button"
+                              className="delete-button"
+                              onClick={() => deleteSupply(supply.id)}
+                              aria-label={`Delete ${supply.name}`}
+                            >
+                              ×
+                            </button>
+                          </>
+                        )}
                       </div>
                       {/* expanded notes */}
                       {isExpanded && (
