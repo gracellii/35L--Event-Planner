@@ -22,6 +22,9 @@ function SupplyList() {
   //add new category state
   const [newCategory, setNewCategory] = useState('')
 
+  //exand/collapse supply notes
+  const [expandedSupplyId, setExpandedSupplyId] = useState(null)
+
   //add supply to overall list
   function addSupply(event) {
     event.preventDefault()
@@ -37,7 +40,8 @@ function SupplyList() {
       name: name.trim(),
       quantity: Number(quantity),
       category: category,
-      completed: false
+      completed: false,
+      notes: ""
     }
 
     setSupplies([...supplies, newSupply])
@@ -74,6 +78,17 @@ function SupplyList() {
       supplies.map(supply =>
         supply.id === id
           ? { ...supply, completed: !supply.completed }
+          : supply
+      )
+    )
+  }
+
+  //add/edit notes for a supply
+  function updateSupplyNotes(id, notes) {
+    setSupplies(
+      supplies.map(supply =>
+        supply.id === id
+          ? { ...supply, notes: notes }
           : supply
       )
     )
@@ -186,7 +201,6 @@ function SupplyList() {
           ).length
 
           return (
-
             <section className="supply-category" key={cat}>
               <div className="category-header">
                 <h2>{cat}</h2>
@@ -200,38 +214,87 @@ function SupplyList() {
                   No supplies yet
                 </p>
               ) : (
-                categorySupplies.map(supply => (
-                  <div className="supply-item" key={supply.id}>
-                    <input
-                      type="checkbox"
-                      checked={supply.completed}
-                      onChange={() => toggleSupply(supply.id)}
-                    />
+                categorySupplies.map(supply => {
+                  const isExpanded = expandedSupplyId === supply.id
 
-                    <span
-                      className={
-                        supply.completed
-                          ? 'supply-name completed'
-                          : 'supply-name'
-                      }
-                    >
-                      {supply.name}
-                    </span>
+                  return (
+                    <div className="supply-entry" key={supply.id}>
+                      <div className="supply-item">
+                        <input
+                          type="checkbox"
+                          checked={supply.completed}
+                          onChange={() => toggleSupply(supply.id)}
+                        />
+                        {/* Clicking on the supply name expands/collapses notes */}
+                        <button
+                          type="button"
+                          className="supply-name-toggle"
+                          onClick={() =>
+                            setExpandedSupplyId(
+                              isExpanded ? null : supply.id
+                            )
+                          }
+                          aria-expanded={isExpanded}
+                          aria-controls={`supply-notes-${supply.id}`}
+                        >
+                          <span
+                            className={
+                              supply.completed
+                                ? 'supply-name completed'
+                                : 'supply-name'
+                            }
+                          >
+                            {supply.name}
+                          </span>
 
-                    <span className="supply-quantity">
-                      Qty: {supply.quantity}
-                    </span>
+                          <span className="expand-indicator">
+                            {isExpanded ? '−' : '+'}
+                          </span>
+                        </button>
 
-                    <button
-                      type="button"
-                      className="delete-button"
-                      onClick={() => deleteSupply(supply.id)}
-                      aria-label={`Delete ${supply.name}`}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))
+                        <span className="supply-quantity">
+                          Qty: {supply.quantity}
+                        </span>
+
+                        <button
+                          type="button"
+                          className="delete-button"
+                          onClick={() => deleteSupply(supply.id)}
+                          aria-label={`Delete ${supply.name}`}
+                        >
+                          ×
+                        </button>
+                      </div>
+                      {/* expanded notes */}
+                      {isExpanded && (
+                        <div
+                          className="supply-notes"
+                          id={`supply-notes-${supply.id}`}
+                        >
+                          <label htmlFor={`notes-${supply.id}`}>
+                            Notes
+                          </label>
+
+                          <textarea
+                            id={`notes-${supply.id}`}
+                            placeholder="Add details about type, source, etc"
+                            value={supply.notes}
+                            onChange={event =>
+                              updateSupplyNotes(supply.id, event.target.value)
+                            }
+                          />
+                          <button
+                          type="button"
+                          className="save-notes-button"
+                          onClick={() => setExpandedSupplyId(null)}
+                        >
+                          Save
+                        </button>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })
               )}
             </section>
           )
