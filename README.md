@@ -19,7 +19,8 @@ This collaborative event-planning application helps hosts organize events in one
 
 - **Frontend:** React, Vite
 - **Backend:** Node.js, Express
-- **Database:** PostgreSQL (planned)
+- **Database:** PostgreSQL
+- **Database Connection:** Node.js `pg` package
 - **Version Control:** Git and GitHub
 
 ## To Run the App
@@ -28,6 +29,7 @@ This collaborative event-planning application helps hosts organize events in one
 - Node.js
 - npm
 - Git
+- PostgreSQL
 
 ### Installation
 
@@ -56,6 +58,23 @@ This collaborative event-planning application helps hosts organize events in one
    npm install
    cd ..
    ```
+
+### Database Setup
+
+For each developer to configure their own PostgreSQL database,
+
+1. Create a PostgreSQL database named `event_planner`.
+
+2. Create a `.env` file in the project root. See `.env.example` as a template.
+
+3. Fill in your own PostgreSQL credentials
+
+4. Initialize the database by running the SQL statements in `server/schema.sql` using pgAdmin or another PostgreSQL client.
+
+5. Create a development event in the `events` table and use its returned ID for `TEST_EVENT_ID` in `server/index.js`.
+
+6. Insert the four default categories into the `categories` table using that event ID.
+
 
 ### Running the Application
 

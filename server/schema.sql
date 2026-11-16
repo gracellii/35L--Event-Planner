@@ -27,3 +27,11 @@ CREATE TABLE supplies (
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+--Categories table
+CREATE TABLE categories (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    event_id INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    UNIQUE (event_id, name)
+);
