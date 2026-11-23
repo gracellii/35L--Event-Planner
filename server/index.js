@@ -1,6 +1,7 @@
 const express = require('express');
 const suppliesRouter = require('./routes/supplies')
 const categoriesRouter = require('./routes/categories')
+const itineraryRouter = require('./routes/itinerary')
 
 const app = express();
 const PORT = 3000;
@@ -11,6 +12,7 @@ const pool = require('./db');
 app.use(express.json());
 app.use('/api/supplies', suppliesRouter)
 app.use('/api/categories', categoriesRouter)
+app.use('/api/itinerary', itineraryRouter)
 
 app.get('/api/hello', (req, res) => {
   res.json({ message: 'Welcome to your Event Planner!' });
