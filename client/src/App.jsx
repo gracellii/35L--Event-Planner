@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Routes, Route } from 'react-router-dom'
 import SupplyList from './pages/SupplyList/SupplyList'
+import Itinerary from './pages/Itinerary/Itinerary'
 import './App.css'
 
 // Home page
@@ -44,12 +45,20 @@ function App() {
           >
             Supply List
           </button>
+
+          <button
+            className="nav-button"
+            onClick={() => navigate('/itinerary')}
+          >
+            Itinerary
+          </button>
         </div>
       </nav>
 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/supplies" element={<SupplyList />} />
+        <Route path="/itinerary" element={<Itinerary />} />
       </Routes>
     </div>
   )

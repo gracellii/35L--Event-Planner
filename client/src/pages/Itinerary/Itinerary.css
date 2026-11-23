@@ -1,0 +1,226 @@
+
+/* Main itinerary page */
+.itinerary-page {
+  width: 100%;
+  max-width: none;
+  margin: 5px 0;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+/* Page heading */
+.itinerary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.itinerary-header h1 {
+  margin-bottom: 6px;
+}
+
+.itinerary-header p {
+  color: var(--text);
+}
+
+.activity-count {
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+/* Add activity form */
+.itinerary-form {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 32px;
+}
+
+.itinerary-form h2,
+.itinerary-list h2 {
+  font-size: 20px;
+  margin: 0 0 18px;
+}
+
+/* Form fields */
+.itinerary-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.itinerary-form-fields label,
+.itinerary-edit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.itinerary-form-fields input,
+.itinerary-form-fields textarea,
+.itinerary-edit-form input,
+.itinerary-edit-form textarea {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+}
+
+.itinerary-form-fields textarea,
+.itinerary-edit-form textarea {
+  min-height: 85px;
+  resize: vertical;
+}
+
+.itinerary-form-fields input:focus,
+.itinerary-form-fields textarea:focus,
+.itinerary-edit-form input:focus,
+.itinerary-edit-form textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Add button */
+.itinerary-add-button,
+.itinerary-save-button {
+  align-self: flex-start;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 7px;
+  background: var(--accent);
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+.itinerary-add-button:hover,
+.itinerary-save-button:hover {
+  opacity: 0.85;
+}
+
+/* Error message */
+.itinerary-error {
+  color: var(--danger, #e05252);
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+/* Schedule */
+.itinerary-list {
+  margin-bottom: 40px;
+}
+
+.itinerary-empty {
+  color: var(--text);
+  padding: 16px 0;
+}
+
+/* Individual activity */
+.itinerary-entry {
+  border-bottom: 1px solid var(--border);
+  padding: 18px 12px;
+}
+
+.itinerary-activity {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Activity time */
+.activity-time {
+  min-width: 75px;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 17px;
+}
+
+/* Activity details */
+.activity-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-details h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  color: var(--text-h);
+}
+
+.activity-details p {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+}
+
+/* Action buttons */
+.itinerary-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.itinerary-edit-button,
+.itinerary-delete-button,
+.itinerary-cancel-button {
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  font: inherit;
+  cursor: pointer;
+}
+
+.itinerary-delete-button:hover {
+  color: var(--danger, #e05252);
+}
+
+.itinerary-cancel-button:hover,
+.itinerary-edit-button:hover {
+  opacity: 0.8;
+}
+
+/* Edit form */
+.itinerary-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.itinerary-save-button {
+  align-self: auto;
+}
+
+.itinerary-save-button:hover {
+  opacity: 0.85;
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+  .itinerary-header {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .itinerary-activity {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .activity-details {
+    flex-basis: calc(100% - 95px);
+  }
+
+  .itinerary-actions {
+    margin-left: 95px;
+  }
+}

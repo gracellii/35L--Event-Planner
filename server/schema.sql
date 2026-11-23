@@ -35,3 +35,14 @@ CREATE TABLE categories (
     name VARCHAR(100) NOT NULL,
     UNIQUE (event_id, name)
 );
+
+
+-- Itinerary table
+CREATE TABLE itinerary (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    event_id INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    activity_time TIME NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
