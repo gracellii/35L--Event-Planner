@@ -3,6 +3,7 @@ import { useNavigate, Routes, Route } from 'react-router-dom'
 import SupplyList from './pages/SupplyList/SupplyList'
 import Itinerary from './pages/Itinerary/Itinerary'
 import PlanningChecklist from './pages/PlanningChecklist/PlanningChecklist'
+import Budget from './pages/Budget/Budget'
 import './App.css'
 
 // Home page
@@ -60,6 +61,13 @@ function App() {
           >
             Planning Checklist
           </button>
+
+          <button
+            className="nav-button"
+            onClick={() => navigate('/budget')}
+          >
+            Budget Tracker
+          </button>
         </div>
       </nav>
 
@@ -68,6 +76,7 @@ function App() {
         <Route path="/supplies" element={<SupplyList />} />
         <Route path="/itinerary" element={<Itinerary />} />
         <Route path="/planning-checklist" element={<PlanningChecklist />} />
+        <Route path="/budget" element={<Budget />} />
       </Routes>
     </div>
   )
