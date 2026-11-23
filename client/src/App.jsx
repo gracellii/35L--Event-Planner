@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, Routes, Route } from 'react-router-dom'
 import SupplyList from './pages/SupplyList/SupplyList'
 import Itinerary from './pages/Itinerary/Itinerary'
+import PlanningChecklist from './pages/PlanningChecklist/PlanningChecklist'
 import './App.css'
 
 // Home page
@@ -52,6 +53,13 @@ function App() {
           >
             Itinerary
           </button>
+
+          <button
+            className="nav-button"
+            onClick={() => navigate('/planning-checklist')}
+          >
+            Planning Checklist
+          </button>
         </div>
       </nav>
 
@@ -59,6 +67,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/supplies" element={<SupplyList />} />
         <Route path="/itinerary" element={<Itinerary />} />
+        <Route path="/planning-checklist" element={<PlanningChecklist />} />
       </Routes>
     </div>
   )

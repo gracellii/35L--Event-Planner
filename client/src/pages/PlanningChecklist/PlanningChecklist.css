@@ -1,0 +1,238 @@
+
+/* Main checklist page */
+.planning-checklist-page {
+  width: 100%;
+  max-width: none;
+  margin: 5px 0;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+/* Page heading */
+.checklist-header {
+  margin-bottom: 28px;
+}
+
+.checklist-header h1 {
+  margin-bottom: 6px;
+}
+
+.checklist-header p {
+  color: var(--text);
+}
+
+/* Progress section */
+.checklist-progress {
+  margin-bottom: 28px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #16a36a;
+  border-radius: 20px;
+  transition: width 0.3s ease;
+}
+
+/* Add task form */
+.checklist-form {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 28px;
+}
+
+.checklist-form h2,
+.checklist-tasks h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.checklist-form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.checklist-form-row input,
+.checklist-edit-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.checklist-form-row input:focus,
+.checklist-edit-form input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Add button */
+.checklist-add-button,
+.checklist-save-button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 7px;
+  background: var(--accent);
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+.checklist-add-button:hover,
+.checklist-save-button:hover {
+  opacity: 0.85;
+}
+
+/* Error message */
+.checklist-error {
+  color: #e05252;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.checklist-empty {
+  color: var(--text);
+  padding: 16px 0;
+}
+
+/* Individual task */
+.checklist-task {
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.checklist-task-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Task checkbox */
+.checklist-task-content > input[type="checkbox"] {
+  width: 19px;
+  height: 19px;
+  cursor: pointer;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* Task details */
+.checklist-task-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: 3px;
+}
+
+.checklist-task-title {
+  color: var(--text-h);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.checklist-task-title.completed {
+  text-decoration: line-through;
+  color: var(--text);
+}
+
+.checklist-status {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.completed-status {
+  color: #16a36a;
+}
+
+.pending-status {
+  color: var(--text);
+}
+
+/* Action buttons */
+.checklist-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.checklist-edit-button,
+.checklist-delete-button,
+.checklist-cancel-button {
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  font: inherit;
+  cursor: pointer;
+}
+
+.checklist-edit-button:hover,
+.checklist-cancel-button:hover {
+  opacity: 0.8;
+}
+
+.checklist-delete-button:hover {
+  color: #e05252;
+}
+
+/* Edit form */
+.checklist-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checklist-save-button {
+  padding: 7px 14px;
+}
+
+.checklist-cancel-button {
+  padding: 7px 14px;
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+  .checklist-form-row {
+    flex-direction: column;
+  }
+
+  .checklist-add-button {
+    align-self: flex-start;
+  }
+
+  .checklist-task-content {
+    flex-wrap: wrap;
+  }
+
+  .checklist-actions {
+    margin-left: 33px;
+  }
+}
