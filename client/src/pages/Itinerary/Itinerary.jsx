@@ -216,7 +216,6 @@ function Itinerary() {
       <div className="itinerary-header">
         <div>
           <h1>Event Itinerary</h1>
-          <p>Plan out everything happening at your event.</p>
         </div>
 
         <span className="activity-count">

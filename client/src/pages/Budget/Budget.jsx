@@ -211,7 +211,6 @@ function Budget() {
       <div className="budget-header">
         <div>
           <h1>Budget Tracker</h1>
-          <p>Set your event budget and split expenses between participants.</p>
         </div>
       </div>
 

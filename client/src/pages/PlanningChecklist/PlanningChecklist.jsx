@@ -228,10 +228,6 @@ function PlanningChecklist() {
       <div className="checklist-header">
         <div>
           <h1>Planning Checklist</h1>
-          <p>
-            Keep track of everything that needs to be done
-            before your event.
-          </p>
         </div>
       </div>
 
