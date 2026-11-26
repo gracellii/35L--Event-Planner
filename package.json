@@ -6,7 +6,8 @@
   "scripts": {
     "server": "nodemon server/index.js",
     "client": "npm --prefix client run dev",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "node --test --test-concurrency=1 \"server/test/*.test.js\""
   },
   "repository": {
     "type": "git",
@@ -21,12 +22,16 @@
   },
   "homepage": "https://github.com/gracellii/35L--Event-Planner#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^18.0.10",
     "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.23.1"
   },
   "devDependencies": {
     "concurrently": "^10.0.7",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "supertest": "^7.3.2"
   }
 }

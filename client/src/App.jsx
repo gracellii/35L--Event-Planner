@@ -1,85 +1,61 @@
-import { useEffect, useState } from 'react'
-import { useNavigate, Routes, Route } from 'react-router-dom'
+import { Link, Navigate, Route, Routes, useParams } from 'react-router-dom'
+import Layout from './components/Layout'
+import ProtectedRoute, { GuestOnlyRoute } from './components/ProtectedRoute'
+import { BackIcon } from './components/Icons'
+import Login from './pages/Login/Login'
+import Register from './pages/Register/Register'
+import Dashboard from './pages/Dashboard/Dashboard'
+import EventPage from './pages/Event/EventPage'
 import SupplyList from './pages/SupplyList/SupplyList'
 import Itinerary from './pages/Itinerary/Itinerary'
 import PlanningChecklist from './pages/PlanningChecklist/PlanningChecklist'
 import Budget from './pages/Budget/Budget'
-import './App.css'
 
-// Home page
-function Home() {
-  const [message, setMessage] = useState('Loading...')
-
-  useEffect(() => {
-    fetch('/api/hello')
-      .then(response => response.json())
-      .then(data => setMessage(data.message))
-      .catch(error => console.error(error))
-  }, [])
-
+// Shows a feature page (supply list, itinerary, ...) inside an event, with a
+// link back to the event.
+// Note: these features' API routes still use TEST_EVENT_ID, so every event
+// shows the same data until each route reads the event id from the URL.
+function InEvent({ children }) {
+  const { id } = useParams()
   return (
-    <div className="page-container">
-      <h1>Event Planner</h1>
-      <p>{message}</p>
-    </div>
+    <main className="container" style={{ paddingTop: 28 }}>
+      <Link to={`/events/${id}`} className="back"><BackIcon /> Back to event</Link>
+      {children}
+    </main>
   )
 }
 
 //main app
 function App() {
-  const navigate = useNavigate()
-
   return (
-    <div>
-      <nav className="navbar">
-        <h2 className="brand">Event Planner</h2>
+    <Routes>
+      <Route element={<Layout />}>
+        {/* Story 1: only for logged-out visitors */}
+        <Route element={<GuestOnlyRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
 
-        <div className="nav-right">
-          <button
-            className="nav-button"
-            onClick={() => navigate('/')}>
-            Home
-          </button>
+        {/* Everything else needs a logged-in user */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/events/:id" element={<EventPage />} />
+          <Route path="/events/:id/supplies" element={<InEvent><SupplyList /></InEvent>} />
+          <Route path="/events/:id/itinerary" element={<InEvent><Itinerary /></InEvent>} />
+          <Route path="/events/:id/planning-checklist" element={<InEvent><PlanningChecklist /></InEvent>} />
+          <Route path="/events/:id/budget" element={<InEvent><Budget /></InEvent>} />
 
-          <button
-            className="nav-button"
-            onClick={() => navigate('/supplies')}
-          >
-            Supply List
-          </button>
+          {/* earlier routes, kept until features use real event ids */}
+          <Route path="/supplies" element={<main className="container"><SupplyList /></main>} />
+          <Route path="/itinerary" element={<main className="container"><Itinerary /></main>} />
+          <Route path="/planning-checklist" element={<main className="container"><PlanningChecklist /></main>} />
+          <Route path="/budget" element={<main className="container"><Budget /></main>} />
+        </Route>
 
-          <button
-            className="nav-button"
-            onClick={() => navigate('/itinerary')}
-          >
-            Itinerary
-          </button>
-
-          <button
-            className="nav-button"
-            onClick={() => navigate('/planning-checklist')}
-          >
-            Planning Checklist
-          </button>
-
-          <button
-            className="nav-button"
-            onClick={() => navigate('/budget')}
-          >
-            Budget Tracker
-          </button>
-        </div>
-      </nav>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/supplies" element={<SupplyList />} />
-        <Route path="/itinerary" element={<Itinerary />} />
-        <Route path="/planning-checklist" element={<PlanningChecklist />} />
-        <Route path="/budget" element={<Budget />} />
-      </Routes>
-    </div>
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Route>
+    </Routes>
   )
 }
 
-export default App 
+export default App
