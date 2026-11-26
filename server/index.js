@@ -1,9 +1,12 @@
 const express = require('express');
+const cookieParser = require('cookie-parser')
 const suppliesRouter = require('./routes/supplies')
 const categoriesRouter = require('./routes/categories')
 const itineraryRouter = require('./routes/itinerary')
 const planningTasksRouter = require('./routes/planningTasks')
 const budgetRouter = require('./routes/budget')
+const authRouter = require('./routes/auth')
+const eventsRouter = require('./routes/events')
 
 const app = express();
 const PORT = 3000;
@@ -12,11 +15,14 @@ const PORT = 3000;
 const pool = require('./db');
 
 app.use(express.json());
+app.use(cookieParser()) // reads the login cookie
 app.use('/api/supplies', suppliesRouter)
 app.use('/api/categories', categoriesRouter)
 app.use('/api/itinerary', itineraryRouter)
 app.use('/api/planning-tasks', planningTasksRouter)
 app.use('/api/budget', budgetRouter)
+app.use('/api/auth', authRouter) // Story 1: register, log in, log out
+app.use('/api/events', eventsRouter) // Story 2: event workspaces
 
 app.get('/api/hello', (req, res) => {
   res.json({ message: 'Welcome to your Event Planner!' });

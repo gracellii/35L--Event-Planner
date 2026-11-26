@@ -75,6 +75,18 @@ For each developer to configure their own PostgreSQL database,
 
 6. Insert the four default categories into the `categories` table using that event ID.
 
+7. Run the migration for accounts and events. It only adds columns and tables, so it's safe on an existing database:
+
+   ```bash
+   psql -d event_planner -f server/migrations/001_accounts_and_workspaces.sql
+   ```
+
+8. Add a `JWT_SECRET` line to your `.env` (see `.env.example`). Any long random string works, for example:
+
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+   ```
+
 
 ### Running the Application
 
@@ -95,6 +107,47 @@ npm run dev
 ```
 to run both ends
  
+### Running the Tests
+
+The tests use their own database, so they don't touch your data. Create it once, then run them:
+
+```bash
+createdb event_planner_test
+npm test
+```
+
+## App Pages
+
+| Page | URL | Story |
+|---|---|---|
+| Log in / Create account | `/login`, `/register` | 1 (Ananya) |
+| Your events (dashboard) | `/dashboard` | 2 (Ananya) |
+| Event page | `/events/:id` | 2 (Ananya) |
+| Itinerary | `/events/:id/itinerary` | 4 (Natalie) |
+| Planning checklist | `/events/:id/planning-checklist` | 5 (Natalie) |
+| Budget tracker | `/events/:id/budget` | 6 (Natalie) |
+| Supply list | `/events/:id/supplies` | 7 (Grace) |
+
+You need to be logged in to see every page except log in and create account.
+
+## API
+
+| Method | Path | What it does |
+|---|---|---|
+| POST | `/api/auth/register` | `{ email, password, name? }` creates an account |
+| POST | `/api/auth/login` | `{ email, password }` logs in |
+| POST | `/api/auth/logout` | logs out |
+| GET | `/api/auth/me` | the logged-in user |
+| GET | `/api/events` | the logged-in user's events |
+| POST | `/api/events` | `{ name, date?, startTime?, endTime?, location?, description? }` creates an event, with you as host |
+| GET | `/api/events/:id` | one event (404 if you don't have access) |
+
+To require login on a route, add `router.use(requireAuth)` (from `server/middleware/auth.js`). Then `req.user` is the logged-in user. Who can see which event is stored in the `event_members` table.
+
+## Design
+
+The app uses the Pastel Pass design (purple, pastel blue and gold, with the Unbounded and Geist fonts). Colors and fonts are set at the top of `client/src/index.css`. The older variable names like `--text` and `--accent` still work, so existing pages use the new colors automatically.
+
 ## Team
 
 Ananya Rai, Natalie Ngo, Mark Rivas, Grace Li
