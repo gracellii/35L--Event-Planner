@@ -11,14 +11,13 @@ import Itinerary from './pages/Itinerary/Itinerary'
 import PlanningChecklist from './pages/PlanningChecklist/PlanningChecklist'
 import Budget from './pages/Budget/Budget'
 
-// Shows a feature page (supply list, itinerary, ...) inside an event, with a
-// link back to the event.
-// Note: these features' API routes still use TEST_EVENT_ID, so every event
-// shows the same data until each route reads the event id from the URL.
+// A feature page (supply list, itinerary, ...) shown inside an event.
+// These features still use TEST_EVENT_ID on the server, so for now every
+// event shows the same data.
 function InEvent({ children }) {
   const { id } = useParams()
   return (
-    <main className="container" style={{ paddingTop: 28 }}>
+    <main className="container tight">
       <Link to={`/events/${id}`} className="back"><BackIcon /> Back to event</Link>
       {children}
     </main>
@@ -45,7 +44,7 @@ function App() {
           <Route path="/events/:id/planning-checklist" element={<InEvent><PlanningChecklist /></InEvent>} />
           <Route path="/events/:id/budget" element={<InEvent><Budget /></InEvent>} />
 
-          {/* earlier routes, kept until features use real event ids */}
+          {/* older routes, kept until the features use real event ids */}
           <Route path="/supplies" element={<main className="container"><SupplyList /></main>} />
           <Route path="/itinerary" element={<main className="container"><Itinerary /></main>} />
           <Route path="/planning-checklist" element={<main className="container"><PlanningChecklist /></main>} />

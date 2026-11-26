@@ -38,6 +38,7 @@ describe('Story 1: registration and login', () => {
       [{ email: 'not-an-email', password: 'party2026' }, ['email']],
       [{ email: 'a@b.co', password: 'short1' }, ['password']],
       [{ email: 'a@b.co', password: 'noNumbersHere' }, ['password']],
+      [{ email: 'a@b.co', password: 'party2026', confirm: 'party2027' }, ['confirm']],
     ]
     for (const [body, fields] of cases) {
       const res = await request(app).post('/api/auth/register').send(body).expect(400)
