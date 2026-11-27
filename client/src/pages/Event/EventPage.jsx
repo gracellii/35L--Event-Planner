@@ -1,4 +1,5 @@
 // Story 2: one event's page, with links to each planning feature
+// Story 11: "Add to calendar" downloads the event as an .ics file
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { api } from '../../api.js'
@@ -8,7 +9,8 @@ import { BackIcon, BoxIcon, CheckIcon, ClockIcon, MailIcon, TeamIcon, WalletIcon
 // One card per feature. Cards with a `link` open that feature's page, and
 // the rest show "Coming soon".
 const sections = [
-  { title: 'Planning team', Icon: TeamIcon, text: 'Invite people to help plan. Only the host can send invites.', link: 'team' },  { title: 'Itinerary', Icon: ClockIcon, text: 'Activities with times and descriptions, in time order.', link: 'itinerary' },
+  { title: 'Planning team', Icon: TeamIcon, text: 'Invite people to help plan. Only the host can send invites.', link: 'team' },
+  { title: 'Itinerary', Icon: ClockIcon, text: 'Activities with times and descriptions, in time order.', link: 'itinerary' },
   { title: 'Planning checklist', Icon: CheckIcon, text: 'Tasks to finish before the event.', link: 'planning-checklist' },
   { title: 'Budget', Icon: WalletIcon, text: 'Set a total and split it evenly among the hosts.', link: 'budget' },
   { title: 'Supply list', Icon: BoxIcon, text: "What's needed, how many, and what's been bought.", link: 'supplies' },
@@ -19,7 +21,6 @@ function Countdown({ date }) {
   const days = daysUntil(date)
   if (days === null) return <><span className="countdown-word">TBD</span><span className="countdown-label">No date yet</span></>
   if (days === 0) return <><span className="countdown-word">Today</span><span className="countdown-label">It's happening</span></>
-
   const n = Math.abs(days)
   return (
     <>
@@ -75,6 +76,11 @@ export default function EventPage() {
           <p className="ticket-meta">{formatWhen(event, true)}</p>
           {event.location && <p className="ticket-meta">{event.location}</p>}
           {event.description && <p className="hero-desc">{event.description}</p>}
+          {event.date && (
+            <a href={`/api/events/${id}/calendar.ics`} className="btn btn-secondary" download>
+              Add to calendar
+            </a>
+          )}
         </div>
         <div className="ticket-stub stub-blue">
           <Countdown date={event.date} />
