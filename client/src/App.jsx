@@ -10,6 +10,7 @@ import SupplyList from './pages/SupplyList/SupplyList'
 import Itinerary from './pages/Itinerary/Itinerary'
 import PlanningChecklist from './pages/PlanningChecklist/PlanningChecklist'
 import Budget from './pages/Budget/Budget'
+import PlanningTeam from './pages/PlanningTeam/PlanningTeam'
 
 // A feature page (supply list, itinerary, ...) shown inside an event.
 // These features still use TEST_EVENT_ID on the server, so for now every
@@ -43,6 +44,7 @@ function App() {
           <Route path="/events/:id/itinerary" element={<InEvent><Itinerary /></InEvent>} />
           <Route path="/events/:id/planning-checklist" element={<InEvent><PlanningChecklist /></InEvent>} />
           <Route path="/events/:id/budget" element={<InEvent><Budget /></InEvent>} />
+          <Route path="/events/:id/team" element={<InEvent><PlanningTeam /></InEvent>} />
 
           {/* older routes, kept until the features use real event ids */}
           <Route path="/supplies" element={<main className="container"><SupplyList /></main>} />

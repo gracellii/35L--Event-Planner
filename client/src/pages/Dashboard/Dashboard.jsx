@@ -5,6 +5,7 @@ import { api } from '../../api.js'
 import { useAuth } from '../../useAuth.js'
 import Field from '../../components/Field.jsx'
 import { PlusIcon } from '../../components/Icons.jsx'
+import InviteList from '../../components/InviteList.jsx'
 import { daysUntil, formatWhen, roleLabel, toDate } from '../../format.js'
 
 const emptyForm = { name: '', date: '', startTime: '', endTime: '', location: '', description: '' }
@@ -180,6 +181,7 @@ export default function Dashboard() {
         </section>
       )}
 
+      <InviteList onAccepted={() => api.listEvents().then((data) => setEvents(data.events))} />
       {loading && <p className="muted">Loading your events...</p>}
       {loadError && <div className="alert alert-error">{loadError}</div>}
       {!loading && !loadError && (
