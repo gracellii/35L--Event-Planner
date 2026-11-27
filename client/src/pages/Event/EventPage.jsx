@@ -8,8 +8,7 @@ import { BackIcon, BoxIcon, CheckIcon, ClockIcon, MailIcon, TeamIcon, WalletIcon
 // One card per feature. Cards with a `link` open that feature's page, and
 // the rest show "Coming soon".
 const sections = [
-  { title: 'Planning team', Icon: TeamIcon, text: 'Invite people to help plan. Only the host can send invites.' },
-  { title: 'Itinerary', Icon: ClockIcon, text: 'Activities with times and descriptions, in time order.', link: 'itinerary' },
+  { title: 'Planning team', Icon: TeamIcon, text: 'Invite people to help plan. Only the host can send invites.', link: 'team' },  { title: 'Itinerary', Icon: ClockIcon, text: 'Activities with times and descriptions, in time order.', link: 'itinerary' },
   { title: 'Planning checklist', Icon: CheckIcon, text: 'Tasks to finish before the event.', link: 'planning-checklist' },
   { title: 'Budget', Icon: WalletIcon, text: 'Set a total and split it evenly among the hosts.', link: 'budget' },
   { title: 'Supply list', Icon: BoxIcon, text: "What's needed, how many, and what's been bought.", link: 'supplies' },

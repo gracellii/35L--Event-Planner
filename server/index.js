@@ -7,6 +7,7 @@ const planningTasksRouter = require('./routes/planningTasks')
 const budgetRouter = require('./routes/budget')
 const authRouter = require('./routes/auth')
 const eventsRouter = require('./routes/events')
+const invitationsRouter = require('./routes/invitations')
 
 const app = express();
 const PORT = 3000;
@@ -23,6 +24,7 @@ app.use('/api/planning-tasks', planningTasksRouter)
 app.use('/api/budget', budgetRouter)
 app.use('/api/auth', authRouter) // Story 1: register, log in, log out
 app.use('/api/events', eventsRouter) // Story 2: event workspaces
+app.use('/api', invitationsRouter) // Story 3: invite event collaborators
 
 app.get('/api/hello', (req, res) => {
   res.json({ message: 'Welcome to your Event Planner!' });

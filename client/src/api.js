@@ -34,4 +34,10 @@ export const api = {
   listEvents: () => request('GET', '/events'),
   createEvent: (form) => request('POST', '/events', form),
   getEvent: (id) => request('GET', `/events/${id}`),
+    // Story 3: invites
+  getTeam: (eventId) => request('GET', `/events/${eventId}/invites`),
+  sendInvite: (eventId, email) => request('POST', `/events/${eventId}/invites`, { email }),
+  myInvites: () => request('GET', '/invites'),
+  acceptInvite: (inviteId) => request('POST', `/invites/${inviteId}/accept`),
+  declineInvite: (inviteId) => request('POST', `/invites/${inviteId}/decline`),
 }
