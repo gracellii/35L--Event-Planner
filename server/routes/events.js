@@ -18,15 +18,37 @@ const EVENT_FIELDS = `
   m.role
 `
 
-// GET: All of the user's events, soonest first
+
+const MAX_SEARCH_LENGTH = 100
+
+// % and _ are wildcards in ILIKE, so escape them to search for them literally
+function escapeLike(text) {
+  return text.replace(/[\\%_]/g, '\\$&')
+}
+
+// GET: All of the user's events, soonest first.
+// Optional ?q= keeps only events whose name, location or description contains it.
 router.get('/', async (req, res) => {
+  const search = typeof req.query.q === 'string' ? req.query.q.trim() : ''
+  if (search.length > MAX_SEARCH_LENGTH) {
+    return res.status(400).json({ message: `Search can be at most ${MAX_SEARCH_LENGTH} characters.` })
+  }
+
+  const params = [req.user.id]
+  let searchFilter = ''
+  if (search) {
+    params.push(`%${escapeLike(search)}%`)
+    searchFilter = 'WHERE e.name ILIKE $2 OR e.location ILIKE $2 OR e.description ILIKE $2'
+  }
+
   try {
     const result = await pool.query(
       `SELECT ${EVENT_FIELDS}
        FROM events e
        JOIN event_members m ON m.event_id = e.id AND m.user_id = $1
+       ${searchFilter}
        ORDER BY e.event_date ASC NULLS LAST, e.start_time ASC NULLS LAST, e.created_at DESC`,
-      [req.user.id]
+      params
     )
     res.json({ events: result.rows })
   } catch (error) {
