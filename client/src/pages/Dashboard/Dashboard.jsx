@@ -49,6 +49,7 @@ export default function Dashboard() {
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState('')
+  const [search, setSearch] = useState('')
 
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState(emptyForm)
@@ -56,14 +57,27 @@ export default function Dashboard() {
   const [formError, setFormError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
-  // The server sends them soonest first
+  // The server sends them soonest first. While the user types a search, wait
+  // until they pause for 300 ms so we don't send a request for every letter.
   useEffect(() => {
-    api
-      .listEvents()
-      .then((data) => setEvents(data.events))
-      .catch((err) => setLoadError(err.message))
-      .finally(() => setLoading(false))
-  }, [])
+    let stale = false // set when a newer search starts, so old results are ignored
+    const timer = setTimeout(() => {
+      api
+        .listEvents(search.trim())
+        .then((data) => {
+          if (stale) return
+          setEvents(data.events)
+          setLoadError('')
+        })
+        .catch((err) => !stale && setLoadError(err.message))
+        .finally(() => !stale && setLoading(false))
+    }, search ? 300 : 0)
+
+    return () => {
+      stale = true
+      clearTimeout(timer)
+    }
+  }, [search])
 
   const update = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
@@ -94,6 +108,7 @@ export default function Dashboard() {
 
   const firstName = user.name?.split(' ')[0]
   const count = events.length
+  const searching = search.trim() !== ''
 
   return (
     <main className="container">
@@ -102,9 +117,11 @@ export default function Dashboard() {
           <h1 className="display">{firstName ? `Hey ${firstName}.` : 'Your events.'}</h1>
           {!loading && !loadError && (
             <p>
-              {count === 0
-                ? 'Nothing planned yet. All you need to start is a name.'
-                : `${count} ${count === 1 ? 'event' : 'events'} in the works.`}
+              {searching
+                ? `${count} ${count === 1 ? 'event matches' : 'events match'} "${search.trim()}".`
+                : count === 0
+                  ? 'Nothing planned yet. All you need to start is a name.'
+                  : `${count} ${count === 1 ? 'event' : 'events'} in the works.`}
             </p>
           )}
         </div>
@@ -179,6 +196,17 @@ export default function Dashboard() {
           </form>
         </section>
       )}
+      <div className="search-bar">
+        <Field
+          label="Search your events"
+          name="search"
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Name, place or description"
+          maxLength={100}
+        />
+      </div>
 
       {loading && <p className="muted">Loading your events...</p>}
       {loadError && <div className="alert alert-error">{loadError}</div>}
@@ -189,7 +217,7 @@ export default function Dashboard() {
               <EventTicket event={event} />
             </li>
           ))}
-          {!showForm && (
+          {!showForm && !searching && (
             <li>
               <button type="button" className="new-ticket" onClick={openForm}>
                 <span className="plus-dot"><PlusIcon size={18} /></span>
