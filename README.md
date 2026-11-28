@@ -154,7 +154,7 @@ You need to be logged in to see every page except log in and create account.
 | POST | `/api/auth/login` | `{ email, password }` logs in |
 | POST | `/api/auth/logout` | logs out |
 | GET | `/api/auth/me` | the logged-in user |
-| GET | `/api/events` | the logged-in user's events ;  optional `q` filters by name, location or description |
+| GET | `/api/events` | the logged-in user's events; optional `q` filters by name, location or description |
 | POST | `/api/events` | `{ name, date?, startTime?, endTime?, location?, description? }` creates an event, with you as host |
 | GET | `/api/events/:id` | one event (404 if you don't have access) |
 
