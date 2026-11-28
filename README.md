@@ -115,6 +115,22 @@ The tests use their own database, so they don't touch your data. Create it once,
 createdb event_planner_test
 npm test
 ```
+#### End-to-end tests
+
+The end-to-end tests use [Playwright](https://playwright.dev/) to open a real browser and click through the app: signing up, logging in and out, creating an event, and searching. They start the server and client themselves, using a separate `event_planner_e2e` database. One-time setup:
+
+```bash
+createdb event_planner_e2e
+npx playwright install chromium
+```
+
+Then stop `npm run dev` if it's running, and run:
+
+```bash
+npm run test:e2e
+```
+
+To watch the browser while the tests run, use `npx playwright test --headed`.
 
 ## App Pages
 
@@ -138,7 +154,7 @@ You need to be logged in to see every page except log in and create account.
 | POST | `/api/auth/login` | `{ email, password }` logs in |
 | POST | `/api/auth/logout` | logs out |
 | GET | `/api/auth/me` | the logged-in user |
-| GET | `/api/events` | the logged-in user's events |
+| GET | `/api/events` | the logged-in user's events ;  optional `q` filters by name, location or description |
 | POST | `/api/events` | `{ name, date?, startTime?, endTime?, location?, description? }` creates an event, with you as host |
 | GET | `/api/events/:id` | one event (404 if you don't have access) |
 
