@@ -31,7 +31,8 @@ export const api = {
   logout: () => request('POST', '/auth/logout'),
   me: () => request('GET', '/auth/me'),
 
-  listEvents: () => request('GET', '/events'),
+  listEvents: (search = '') =>
+    request('GET', search ? `/events?${new URLSearchParams({ q: search })}` : '/events'),
   createEvent: (form) => request('POST', '/events', form),
   getEvent: (id) => request('GET', `/events/${id}`),
 }
